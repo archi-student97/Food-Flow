@@ -62,8 +62,12 @@ export const authService = {
       saveLocalUser(user);
       return user;
     } catch {
-      saveLocalUser(null);
-      throw new Error("Not authenticated");
+      const user = readLocalUser();
+      if (!user) {
+        saveLocalUser(null);
+        throw new Error("Not authenticated");
+      }
+      return user;
     }
   },
 
