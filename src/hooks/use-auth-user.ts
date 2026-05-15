@@ -13,6 +13,14 @@ export function useAuthUser() {
     let mounted = true;
 
     const syncUser = async () => {
+      const authHint = typeof window !== "undefined" ? localStorage.getItem(AUTH_HINT_KEY) : null;
+      if (!authHint) {
+        if (!mounted) return;
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
       try {
         const data = await authService.me();
         if (!mounted) return;
