@@ -16,13 +16,15 @@ export function Navbar() {
 
   const handleLogout = async () => {
     setLoggingOut(true);
+    localStorage.removeItem("foodflow_auth_user");
+    localStorage.removeItem("foodflow_logged_in");
+    window.dispatchEvent(new Event("auth-changed"));
     try {
       await authService.logout();
-      window.dispatchEvent(new Event("auth-changed"));
+    } finally {
       router.refresh();
       router.push("/");
       setMobileOpen(false);
-    } finally {
       setLoggingOut(false);
     }
   };
